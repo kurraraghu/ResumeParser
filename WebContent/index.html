@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Resume Parser</title>
+<script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
+<link href="resources/bootstrap.min.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="resources/jquery.fileupload.css">
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container">
+		<ul class="nav navbar-nav">
+	        <li class="active">
+	        	<!-- The fileinput-button span is used to style the file input field as button -->
+				<!-- <a href="#" class="star" onclick="javascript:star();return false;"><i class="fa-star"></i>star</a>    -->
+			    <button class="btn btn-default fileinput-button" style="margin: 7px;">
+			        <span>Upload Resume</span>
+			        <input id="fileupload" type="file" name="files[]" multiple>
+			    </button>
+		    </li>
+		    <li>
+		    <div style="margin: 12px;">
+		    	<img id="spinner" style="display:none;" src="images/ajax-loader.gif" >
+		    </div>
+		    </li>
+		</ul>
+	</div>
+</nav>
+<div class="container">
+	<table class="table">
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Mobile</th>
+			<th>Skills</th>
+		</tr>
+		<tr>
+			<td id="name"></td>
+			<td id="email"></td>
+			<td id="mobile"></td>
+			<td id="skills"></td>
+		</tr>
+	</table>
+</div>
+<script src="resources/jquery.ui.widget.js"></script>
+<script src="resources/jquery.iframe-transport.js"></script>
+<script src="resources/jquery.fileupload.js"></script>
+<script src="resources/bootstrap.min.js"></script>
+<script>
+/*jslint unparam: true */
+/*global window, $ */
+$(function () {
+    'use strict';
+    // Change this to the location of your server-side upload handler:
+    var url = 'UploadServlet';
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        done: function (e, data) {
+        	console.log(data);
+        	$("#spinner").hide();
+        	$("#name").text(data.result.name);
+        	$("#email").text(data.result.email);
+        	$("#mobile").text(data.result.mobile);
+        	$("#skills").text(data.result.skills);
+        },
+        progressall: function (e, data) {
+          $("#spinner").show();
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+</script>
+</body>
+</html>
